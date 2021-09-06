@@ -42,7 +42,7 @@ const App = () => {
                     height: 20,
                     borderRadius: 5,
                   }}
-                ></View>
+                />
                 <TouchableOpacity onPress={() => removeRow(r)}>
                   <Image
                     style={{ width: 20, height: 20, marginLeft: 10 }}
@@ -73,7 +73,7 @@ const App = () => {
                     borderRadius: 20,
                     margin: 8,
                   }}
-                ></View>
+                />
               </TouchableOpacity>
             );
           })}
