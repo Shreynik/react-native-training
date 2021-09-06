@@ -1,115 +1,86 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, { useState } from 'react';
+import { ScrollView, Text, TouchableOpacity, View, Image } from 'react-native';
+import { ColorsList } from './constants/colors';
 
-import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const Section = ({ children, title }) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}
-      >
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}
-      >
-        {children}
-      </Text>
-    </View>
-  );
-};
+const deleteIcon = require('./images/delete.png');
 
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+  const [rows, setRows] = useState([]);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const addRow = (color) => {
+    setRows((r) => [...r, color]);
+  };
+
+  const removeRow = (color) => {
+    let removed = false;
+    const newRows = rows.reduce((acc, curr) => {
+      if (curr !== color || removed) {
+        acc.push(curr);
+        return acc;
+      }
+      removed = true;
+      return acc;
+    }, []);
+    setRows(newRows);
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}
-      >
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}
-        >
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+    <View style={{ flex: 1, margin: 10, padding: 20 }}>
+      <ScrollView>
+        <Text style={{ margin: 10 }}>Color List</Text>
+        <View>
+          {rows.map((r, i) => {
+            return (
+              <View
+                key={`${i}-${r}`}
+                style={{ flexDirection: 'row', margin: 10 }}
+              >
+                <View
+                  style={{
+                    flex: 1,
+                    backgroundColor: r,
+                    height: 20,
+                    borderRadius: 5,
+                  }}
+                ></View>
+                <TouchableOpacity onPress={() => removeRow(r)}>
+                  <Image
+                    style={{ width: 20, height: 20, marginLeft: 10 }}
+                    source={deleteIcon}
+                  />
+                </TouchableOpacity>
+              </View>
+            );
+          })}
         </View>
       </ScrollView>
-    </SafeAreaView>
+      <View style={{ marginTop: 10 }}>
+        <View
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'row',
+          }}
+        >
+          {ColorsList.map((color) => {
+            return (
+              <TouchableOpacity key={color} onPress={() => addRow(color)}>
+                <View
+                  style={{
+                    height: 30,
+                    backgroundColor: color,
+                    width: 30,
+                    borderRadius: 20,
+                    margin: 8,
+                  }}
+                ></View>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
+    </View>
   );
 };
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;
