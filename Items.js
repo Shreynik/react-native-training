@@ -54,10 +54,7 @@ export default Items = () => {
             <FlatList
               data={row}
               keyExtractor={(it) => it.title}
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}
+              numColumns={defaultGroup}
               renderItem={({ item }) => {
                 return (
                   <View
