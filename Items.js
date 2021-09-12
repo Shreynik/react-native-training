@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  ScrollView,
-  View,
-  Image,
-  Text,
-  useWindowDimensions,
-} from 'react-native';
+import { View, Image, Text, useWindowDimensions, FlatList } from 'react-native';
 const img1 = require('./images/fashion_image_1.jpeg');
 const img2 = require('./images/fashion_image_2.jpeg');
 const img3 = require('./images/fashion_image_3.jpeg');
@@ -52,14 +46,19 @@ export default Items = () => {
   }, []);
   return (
     <View style={{ flex: 1, margin: 10, padding: 10 }}>
-      <ScrollView>
-        {rows.map((row, i) => {
+      <FlatList
+        data={rows}
+        keyExtractor={(_, i) => i}
+        renderItem={({ item: row }) => {
           return (
-            <View
-              key={i}
-              style={{ flexDirection: 'row', justifyContent: 'space-between' }}
-            >
-              {row.map((item) => {
+            <FlatList
+              data={row}
+              keyExtractor={(it) => it.title}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
+              renderItem={({ item }) => {
                 return (
                   <View
                     style={{
@@ -68,7 +67,6 @@ export default Items = () => {
                       padding: 10,
                       width: 160,
                     }}
-                    key={item.title}
                   >
                     <Image
                       style={{ width: 120, height: 120 }}
@@ -78,11 +76,11 @@ export default Items = () => {
                     <Text style={{ marginTop: 10 }}>{item.price}</Text>
                   </View>
                 );
-              })}
-            </View>
+              }}
+            />
           );
-        })}
-      </ScrollView>
+        }}
+      />
     </View>
   );
 };
